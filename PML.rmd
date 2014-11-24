@@ -19,8 +19,8 @@ options(warn=-1)
 # Some values which contained "#DIV/0!" were replaced with an NA value
 
 ```{r}
-training_data <- read.csv("pml-training.csv", na.strings=c("#DIV/0!") )
-evaluation_data <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!") )
+training_data <- read.csv("pml-training.csv",sep=",",na.strings = c("NA",""),header=TRUE)
+evaluation_data <- read.csv("pml-testing.csv", sep=",",na.strings = c("NA",""),header=TRUE)
 ```
 
 # All columns 8 were assigned to be numeric
