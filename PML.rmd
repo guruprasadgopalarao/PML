@@ -1,6 +1,6 @@
 # Practical Machine Learning - Prediction Assignment
 
-#### For this assignment I analyzed the provided data to determine what activity an individual performs. Packages "caret" and "randomForest" were utilized to get correct results. Seed value was used for consistent result
+#### For this assignment I analyzed the provided data to determine what activity an individual performs. Packages "caret" and "randomForest" were utilized to get correct results. Seed value was used for consistent result.
 ```{r}
 library(Hmisc)
 library(caret)
@@ -15,7 +15,7 @@ options(warn=-1)
 training_data <- read.csv("pml-training.csv",sep=",",na.strings = c("NA",""),header=TRUE)
 evaluation_data <- read.csv("pml-testing.csv", sep=",",na.strings = c("NA",""),header=TRUE)
 ```
-#### All columns 8 were assigned to be numeric
+#### All 8 columns assigned to be numeric
 ```{r}
 for(i in c(8:ncol(training_data)-1)) {training_data[,i] = as.numeric(as.character(training_data[,i]))}
 
