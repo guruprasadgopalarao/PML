@@ -52,17 +52,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 
-<div id="practical-machine-learning---prediction-assignment" class="section level2">
-<h2>Practical Machine Learning - Prediction Assignment</h2>
-</div>
-<div id="section" class="section level2">
-<h2>————————————————–</h2>
-</div>
-<div id="for-this-assignment-i-analyzed-the-provided-data-to-determine-what-activity-an-individual-perform." class="section level1">
-<h1>For this assignment I analyzed the provided data to determine what activity an individual perform.</h1>
-</div>
-<div id="packages-caret-and-randomforest-were-utilized-to-get-correct-results.-seed-value-was-used-for-consistent-result" class="section level1">
-<h1>Packages “caret” and “randomForest” were utilized to get correct results. Seed value was used for consistent result</h1>
+<div id="practical-machine-learning---prediction-assignment" class="section level1">
+<h1>Practical Machine Learning - Prediction Assignment</h1>
+<div id="for-this-assignment-i-analyzed-the-provided-data-to-determine-what-activity-an-individual-performs.-packages-caret-and-randomforest-were-utilized-to-get-correct-results.-seed-value-was-used-for-consistent-result" class="section level4">
+<h4>For this assignment I analyzed the provided data to determine what activity an individual performs. Packages “caret” and “randomForest” were utilized to get correct results. Seed value was used for consistent result</h4>
 <pre class="r"><code>library(Hmisc)</code></pre>
 <pre><code>## Loading required package: grid
 ## Loading required package: lattice
@@ -100,28 +93,19 @@ library(doParallel)</code></pre>
 <pre class="r"><code>set.seed(2048)
 options(warn=-1)</code></pre>
 </div>
-<div id="data-for-test-and-training-was-loaded-into-respective-data-frames" class="section level1">
-<h1>Data for test and training was loaded into respective data frames</h1>
+<div id="data-for-test-and-training-was-loaded-into-respective-data-frames.-some-values-which-contained-div0-were-replaced-with-an-na-value" class="section level4">
+<h4>Data for test and training was loaded into respective data frames. Some values which contained “#DIV/0!” were replaced with an NA value</h4>
+<pre class="r"><code>training_data &lt;- read.csv(&quot;pml-training.csv&quot;,sep=&quot;,&quot;,na.strings = c(&quot;NA&quot;,&quot;&quot;),header=TRUE)
+evaluation_data &lt;- read.csv(&quot;pml-testing.csv&quot;, sep=&quot;,&quot;,na.strings = c(&quot;NA&quot;,&quot;&quot;),header=TRUE)</code></pre>
 </div>
-<div id="some-values-which-contained-div0-were-replaced-with-an-na-value" class="section level1">
-<h1>Some values which contained “#DIV/0!” were replaced with an NA value</h1>
-<pre class="r"><code>training_data &lt;- read.csv(&quot;pml-training.csv&quot;, na.strings=c(&quot;#DIV/0!&quot;) )
-evaluation_data &lt;- read.csv(&quot;pml-testing.csv&quot;, na.strings=c(&quot;#DIV/0!&quot;) )</code></pre>
-</div>
-<div id="all-columns-8-were-assigned-to-be-numeric" class="section level1">
-<h1>All columns 8 were assigned to be numeric</h1>
+<div id="all-columns-8-were-assigned-to-be-numeric" class="section level4">
+<h4>All columns 8 were assigned to be numeric</h4>
 <pre class="r"><code>for(i in c(8:ncol(training_data)-1)) {training_data[,i] = as.numeric(as.character(training_data[,i]))}
 
 for(i in c(8:ncol(evaluation_data)-1)) {evaluation_data[,i] = as.numeric(as.character(evaluation_data[,i]))}</code></pre>
 </div>
-<div id="some-columns-were-mostly-blank.-these-did-not-contribute-well-to-the-prediction.-i-chose-a-feature" class="section level1">
-<h1>Some columns were mostly blank. These did not contribute well to the prediction. I chose a feature</h1>
-</div>
-<div id="included-complete-columns.-removed-user-name-timestamps-and-windows." class="section level1">
-<h1>included complete columns. Removed user name, timestamps and windows.</h1>
-</div>
-<div id="determine-and-display-out-feature-set" class="section level1">
-<h1>Determine and display out feature set</h1>
+<div id="some-columns-were-mostly-blank.-these-did-not-contribute-well-to-the-prediction.-i-chose-a-feature-included-complete-columns.-removed-user-name-timestamps-and-windows.-determine-and-display-out-feature-set" class="section level4">
+<h4>Some columns were mostly blank. These did not contribute well to the prediction. I chose a feature included complete columns. Removed user name, timestamps and windows. Determine and display out feature set</h4>
 <pre class="r"><code>feature_set &lt;- colnames(training_data[colSums(is.na(training_data)) == 0])[-(1:7)]
 model_data &lt;- training_data[feature_set]
 feature_set</code></pre>
@@ -144,17 +128,14 @@ feature_set</code></pre>
 ## [49] &quot;accel_forearm_z&quot;      &quot;magnet_forearm_x&quot;     &quot;magnet_forearm_y&quot;    
 ## [52] &quot;magnet_forearm_z&quot;     &quot;classe&quot;</code></pre>
 </div>
-<div id="model-data-was-built-from-feature-set" class="section level1">
-<h1>Model data was built from feature set</h1>
+<div id="model-data-was-built-from-feature-set" class="section level4">
+<h4>Model data was built from feature set</h4>
 <pre class="r"><code>idx &lt;- createDataPartition(y=model_data$classe, p=0.75, list=FALSE )
 training &lt;- model_data[idx,]
 testing &lt;- model_data[-idx,]</code></pre>
 </div>
-<div id="build-5-random-forests-with-150-trees-each.-use-parallel-processing-to-build-this-model" class="section level1">
-<h1>Build 5 random forests with 150 trees each. Use parallel processing to build this model</h1>
-</div>
-<div id="model.-i-found-several-examples-of-how-to-perform-parallel-processing-with-random-forests-in-r-this" class="section level1">
-<h1>model. I found several examples of how to perform parallel processing with random forests in R, this</h1>
+<div id="use-parallel-processing-to-build-this-model" class="section level4">
+<h4>Use parallel processing to build this model</h4>
 <pre class="r"><code>registerDoParallel()
 x &lt;- training[-ncol(training)]
 y &lt;- training$classe
@@ -163,8 +144,8 @@ rf &lt;- foreach(ntree=rep(150, 6), .combine=randomForest::combine, .packages='r
 randomForest(x, y, ntree=ntree) 
 }</code></pre>
 </div>
-<div id="provide-error-reports-for-both-training-and-test-data" class="section level1">
-<h1>Provide error reports for both training and test data</h1>
+<div id="provide-error-reports-for-both-training-and-test-data" class="section level4">
+<h4>Provide error reports for both training and test data</h4>
 <pre class="r"><code>predictions1 &lt;- predict(rf, newdata=training)
 confusionMatrix(predictions1,training$classe)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
@@ -204,45 +185,39 @@ confusionMatrix(predictions2,testing$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1395    5    0    0    0
-##          B    0  941    6    0    0
-##          C    0    3  848    8    2
-##          D    0    0    1  796    2
-##          E    0    0    0    0  897
+##          A 1395    4    0    0    0
+##          B    0  942    6    0    0
+##          C    0    3  848    9    2
+##          D    0    0    1  795    1
+##          E    0    0    0    0  898
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.9945         
-##                  95% CI : (0.992, 0.9964)
-##     No Information Rate : 0.2845         
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
-##                                          
-##                   Kappa : 0.993          
-##  Mcnemar's Test P-Value : NA             
+##                                           
+##                Accuracy : 0.9947          
+##                  95% CI : (0.9922, 0.9965)
+##     No Information Rate : 0.2845          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9933          
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            1.0000   0.9916   0.9918   0.9900   0.9956
-## Specificity            0.9986   0.9985   0.9968   0.9993   1.0000
-## Pos Pred Value         0.9964   0.9937   0.9849   0.9962   1.0000
-## Neg Pred Value         1.0000   0.9980   0.9983   0.9981   0.9990
+## Sensitivity            1.0000   0.9926   0.9918   0.9888   0.9967
+## Specificity            0.9989   0.9985   0.9965   0.9995   1.0000
+## Pos Pred Value         0.9971   0.9937   0.9838   0.9975   1.0000
+## Neg Pred Value         1.0000   0.9982   0.9983   0.9978   0.9993
 ## Prevalence             0.2845   0.1935   0.1743   0.1639   0.1837
-## Detection Rate         0.2845   0.1919   0.1729   0.1623   0.1829
-## Detection Prevalence   0.2855   0.1931   0.1756   0.1629   0.1829
-## Balanced Accuracy      0.9993   0.9950   0.9943   0.9947   0.9978</code></pre>
-<div id="conclusions-and-test-data-submit" class="section level2">
-<h2>Conclusions and Test Data Submit</h2>
-</div>
-<div id="section-1" class="section level2">
-<h2>——————————–</h2>
+## Detection Rate         0.2845   0.1921   0.1729   0.1621   0.1831
+## Detection Prevalence   0.2853   0.1933   0.1758   0.1625   0.1831
+## Balanced Accuracy      0.9994   0.9956   0.9942   0.9942   0.9983</code></pre>
 </div>
 </div>
-<div id="based-on-the-confusion-matrix-this-model-is-accurate" class="section level1">
-<h1>Based on the confusion matrix this model is accurate</h1>
-</div>
-<div id="submission-of-the-final-code-for-problem-file-generation" class="section level1">
-<h1>Submission of the final code for problem file generation</h1>
+<div id="conclusions-and-test-data-submit" class="section level1">
+<h1>Conclusions and Test Data Submit</h1>
+<div id="based-on-the-confusion-matrix-this-model-is-accurate.-submission-of-the-final-code-for-problem-file-generation" class="section level4">
+<h4>Based on the confusion matrix this model is accurate. Submission of the final code for problem file generation</h4>
 <pre class="r"><code>pml_write_files = function(x){
   n = length(x)
   for(i in 1:n){
@@ -261,6 +236,7 @@ answers</code></pre>
 ##  B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B 
 ## Levels: A B C D E</code></pre>
 <pre class="r"><code>pml_write_files(answers)</code></pre>
+</div>
 </div>
 
 
